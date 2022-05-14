@@ -58,6 +58,8 @@
 
 \usepackage{chemmacros}
 
+\newcommand*{\asgn}{\leftarrow}
+
 \renewcommand*{\thefootnote}{\fnsymbol{footnote}}
 \newcommand*{\manual}[1]{\texttt{Tabularray}\footnote[2]{버전 2022A (2022-03-01)} 매뉴얼 \textbf{#1}}
 
@@ -123,14 +125,14 @@
 
     \begin{column}{0.5\textwidth}
       \begin{lstlisting}
-    \begin{tblr}{%
-      vlines, hlines,
-      colspec = {Q[$]l},
-    }
-      a_i &   b   \\
-        & text  \\
-      x_i & text  \\
-    \end{tblr}
+\begin{tblr}{%
+  vlines, hlines,
+  colspec = {Q[$]l},
+}
+  a_i &   b   \\
+    & text  \\
+  x_i & text  \\
+\end{tblr}
       \end{lstlisting}
     \end{column}
   \end{columns}
@@ -199,6 +201,60 @@ dolor \\ sit \\ amet,
 consectetur
 \begin{tblr}[b]{hlines, colspec={c}, baseline=B}
 adipiscing \\ elit. \\
+\end{tblr}
+  \end{lstlisting}
+\end{frame}
+
+\begin{frame}[c,fragile,allowframebreaks]
+  \frametitle{열 너비 비율}
+  참고: \manual{???}
+
+  \begin{center}
+    \tiny
+    \begin{tblr}{colspec={X[4,c]X[5,l]X[3,l,f]},rulesep=.8pt}
+      \hline[1pt]
+      Category & Operation & Description \\
+      \hline
+      \hline
+      \SetCell[r=2]{m} {Arithmetic\\Operations} & Addition & $C \asgn A + B$ \\
+                                  & Subtraction & $C \asgn A - B$ \\
+      \hline
+      \SetCell[r=6]{m} {Bitwise\\Boolean\\Operations} & NAND & $C \asgn \neg(A \mathbin{\&} B)$ \\
+                                  & NOR & $C \asgn \neg(A \mathbin{|} B)$ \\
+                                  & XNOR & $C \asgn A \mathbin{\equiv} B$ \\
+                                  & AND & $C \asgn A \mathbin{\&} B$ \\
+                                  & OR & $C \asgn A \mathbin{|} B$ \\
+                                  & XOR & $C \asgn A \oplus B$ \\
+      \hline
+      \SetCell[r=4]{m} {Shifting\\Operations} & Logical Right Shift & $C \asgn A \gg 1$ \\
+                                & Arithmetic Right Shift & $C \asgn A \ggg 1$ \\
+                                & Logical Left Shift & $C \asgn A \ll 1$ \\
+                                & Arithmetic Left Shift & $C \asgn A \lll 1$ \\
+      \hline[1pt]
+    \end{tblr}
+  \end{center}
+
+  \begin{lstlisting}
+\begin{tblr}{colspec={X[4,c]X[5,l]X[3,l,f]},rulesep=.8pt}
+  \hline[1pt]
+  Category & Operation & Description \\
+  \hline
+  \hline
+  \SetCell[r=2]{m} {Arithmetic\\Operations} & Addition & $C \asgn A + B$ \\
+                              & Subtraction & $C \asgn A - B$ \\
+  \hline
+  \SetCell[r=6]{m} {Bitwise\\Boolean\\Operations} & NAND & $C \asgn \neg(A \mathbin{\&} B)$ \\
+                              & NOR & $C \asgn \neg(A \mathbin{|} B)$ \\
+                              & XNOR & $C \asgn A \mathbin{\equiv} B$ \\
+                              & AND & $C \asgn A \mathbin{\&} B$ \\
+                              & OR & $C \asgn A \mathbin{|} B$ \\
+                              & XOR & $C \asgn A \oplus B$ \\
+  \hline
+  \SetCell[r=4]{m} {Shifting\\Operations} & Logical Right Shift & $C \asgn A \gg 1$ \\
+                            & Arithmetic Right Shift & $C \asgn A \ggg 1$ \\
+                            & Logical Left Shift & $C \asgn A \ll 1$ \\
+                            & Arithmetic Left Shift & $C \asgn A \lll 1$ \\
+  \hline[1pt]
 \end{tblr}
   \end{lstlisting}
 \end{frame}
