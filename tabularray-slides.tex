@@ -1,0 +1,377 @@
+%! TEX program = xelatex
+\documentclass{beamer}
+
+\usepackage{kotex}
+
+%%% Math settings
+\usepackage{amssymb,amsmath} % Before unicode-math
+\usepackage[math-style=TeX,bold-style=TeX]{unicode-math}
+
+\newfontfamily{\fallbackfont}{EB Garamond}
+\DeclareTextFontCommand{\textfallback}{\fallbackfont}
+\usepackage{newunicodechar}
+\newunicodechar{⩴}{\textfallback{⩴}}
+
+%% Font settings
+\setmainfont{Libertinus Serif}[Scale=1.13]
+\setsansfont{Libertinus Sans}[Scale=1.13]
+\setmonofont{Inconsolata}[Scale=1.13]
+
+\setmathfont{Libertinus Math}[Scale=1.13] % Before set*hangulfont
+
+\setmainhangulfont{Noto Serif CJK KR}
+\setsanshangulfont[BoldFont={* Bold}]{KoPubWorldDotum_Pro}
+\setmonohangulfont{D2Coding}
+
+%%%%%%%%%%%%%%%%%%%%%
+%  Beamer Settings  %
+%%%%%%%%%%%%%%%%%%%%%
+\usetheme[numbering=fraction,progressbar=frametitle]{metropolis}
+\useoutertheme[subsection=false]{miniframes}
+\usecolortheme{rose}
+
+\setbeamertemplate{itemize item}[square]
+\setbeamertemplate{itemize subitem}[triangle]
+\setbeamertemplate{itemize subsubitem}[circle]
+
+% Custom commands
+\usepackage{listings}
+\lstdefinestyle{mystyle}{
+    basicstyle=\ttfamily\scriptsize,
+    breaklines=true
+}
+\lstset{style=mystyle}
+
+\usepackage{hyperref}
+
+\usepackage{tabularray}
+\UseTblrLibrary{booktabs}
+\UseTblrLibrary{siunitx}
+\NewTableCommand\SC{\SetCell{bg=red8}}
+
+\usepackage{tcolorbox}
+\tcbuselibrary{listings,breakable}
+\tcbset{listing engine=listings,colframe=black,colback=white,size=small}
+\NewDocumentEnvironment{exampleside}{}%
+  {\tcblisting{listing above text}}%
+  {\endtcblisting}
+
+\usepackage{chemmacros}
+
+\renewcommand*{\thefootnote}{\fnsymbol{footnote}}
+\newcommand*{\manual}[1]{\texttt{Tabularray}\footnote[2]{버전 2022A (2022-03-01)} 매뉴얼 \textbf{#1}}
+
+
+\title{\texttt{tabularray}로 표 그리기}
+\author{이재호}
+\date{2022년 5월 17일}
+
+\begin{document}
+\maketitle
+
+% \begin{frame}[t]
+%   \frametitle{목차}
+%   \tableofcontents
+% \end{frame}
+
+% https://tex.stackexchange.com/search?page=2&tab=Relevance&q=user%3a106776%20%5btabularray%5d
+
+\section{도입}
+\begin{frame}[c,fragile]
+  \frametitle{혜성처럼 등장한...}
+  \begin{itemize}
+    \item Overleaf users must download from \url{https://ctan.org/tex-archive/macros/latex/contrib/tabularray} and put it in the project directory.
+    \item \verb/sudo tlmgr update tabularray/
+    \item 2022A 기준
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[c]
+  \frametitle{표를 그리자}
+  \begin{tblr}{cc}
+    \toprule
+    입력 & 출력 \\
+    \midrule
+    1 & 5 \\
+    2 & 7 \\
+    3 & \SC9 \\
+    \bottomrule
+  \end{tblr}
+\end{frame}
+
+\section{기본}
+\begin{frame}[c,fragile,allowframebreaks]
+  \frametitle{열 타입}
+  % https://tex.stackexchange.com/a/608978/97583
+  \texttt{colspec}
+
+  참고: \manual{???}
+
+  \begin{columns}
+    \begin{column}{0.5\textwidth}
+      \begin{center}
+        \begin{tblr}{%
+          vlines, hlines,
+          colspec = {Q[$]l},
+        }
+        a_i &   b   \\
+            & text  \\
+        x_i & text  \\
+        \end{tblr}
+      \end{center}
+    \end{column}
+
+    \begin{column}{0.5\textwidth}
+      \begin{lstlisting}
+    \begin{tblr}{%
+      vlines, hlines,
+      colspec = {Q[$]l},
+    }
+      a_i &   b   \\
+        & text  \\
+      x_i & text  \\
+    \end{tblr}
+      \end{lstlisting}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}[c,fragile,allowframebreaks]
+  \frametitle{칸 정렬}
+  % https://tex.stackexchange.com/a/597283/97583
+  \verb/tbhf/
+  h: text in the head of the cell
+
+  f: foot of the cell
+
+  b: bottom line in the middle
+
+  t: top line in the middle
+
+  참고: \manual{???}
+
+  \begin{center}
+    \begin{tblr}[t]{hlines, colspec={c}, baseline=T}
+      \hline
+      {row\\head} & {top\\line} & {middle} & {line\\bottom} & {row\\foot} \\
+      \hline
+      {row\\head} & {top\\line} & {11\\22\\mid\\44\\55} & {line\\bottom} & {row\\foot} \\
+      \hline
+    \end{tblr}
+  \end{center}
+
+  \framebreak
+  \begin{lstlisting}
+\begin{tblr}[t]{hlines, colspec={c}, baseline=T}
+  \hline
+  {row\\head} & {top\\line} & {middle} & {line\\bottom} & {row\\foot} \\
+  \hline
+  {row\\head} & {top\\line} & {11\\22\\mid\\44\\55} & {line\\bottom} & {row\\foot} \\
+  \hline
+\end{tblr}
+  \end{lstlisting}
+\end{frame}
+
+\begin{frame}[c,fragile,allowframebreaks]
+  \frametitle{문장과 정렬}
+  % https://tex.stackexchange.com/a/608979/97583
+  \verb/baseline/
+
+  참고: \manual{???}
+
+  \begin{center}
+    Lorem ipsum
+    \begin{tblr}[t]{hlines, colspec={c}, baseline=T}
+    dolor \\ sit \\ amet,
+    \end{tblr}
+    consectetur
+    \begin{tblr}[b]{hlines, colspec={c}, baseline=B}
+    adipiscing \\ elit. \\
+    \end{tblr}
+  \end{center}
+
+  \framebreak
+  \begin{lstlisting}
+Lorem ipsum
+\begin{tblr}[t]{hlines, colspec={c}, baseline=T}
+dolor \\ sit \\ amet,
+\end{tblr}
+consectetur
+\begin{tblr}[b]{hlines, colspec={c}, baseline=B}
+adipiscing \\ elit. \\
+\end{tblr}
+  \end{lstlisting}
+\end{frame}
+
+\section{심화}
+\begin{frame}[c,fragile,allowframebreaks]
+  \frametitle{특별한 구분자}
+  \texttt{vline} \& \texttt{hline}
+
+  참고: \manual{2.2 Hlines and Vlines}
+
+  \begin{center}
+    \begin{tblr}{%
+      vlines, hlines,
+      colspec = {lX[c]X[c]X[c]X[c]},
+      vline{2} = {1}{ text = \clap{:} },
+      vline{3} = {1}{ text = \clap{\ch{+}} },
+      vline{4} = {1}{ text = \clap{\ch{->}} },
+      vline{5} = {1}{ text = \clap{\ch{+}} },
+    }
+      Equation & \ch{CH4} & \ch{2 O2} & \ch{CO2} & \ch{2 H2O} \\
+      Initial  & $n_1$    & $n_2$     & 0        & 0 \\
+      Final    & $n_1-x$  & $n_2-2x$  & $x$      & $2x$ \\
+    \end{tblr}
+  \end{center}
+
+  \framebreak
+  \begin{lstlisting}
+% \usepackage{chemmacros} in the preamble
+\begin{tblr}{%
+  vlines, hlines,
+  colspec = {lX[c]X[c]X[c]X[c]},
+  vline{2} = {1}{ text = \clap{:} },
+  vline{3} = {1}{ text = \clap{\ch{+}} },
+  vline{4} = {1}{ text = \clap{\ch{->}} },
+  vline{5} = {1}{ text = \clap{\ch{+}} },
+}
+  Equation & \ch{CH4} & \ch{2 O2} & \ch{CO2} & \ch{2 H2O} \\
+  Initial  & $n_1$    & $n_2$     & 0        & 0 \\
+  Final    & $n_1-x$  & $n_2-2x$  & $x$      & $2x$ \\
+\end{tblr}
+  \end{lstlisting}
+\end{frame}
+
+\begin{frame}[c,fragile,allowframebreaks]
+  \frametitle{표 명령어}
+  % https://tex.stackexchange.com/a/630808/97583
+  \begin{itemize}
+    \item \verb/\NewTableCommand/를 사용하여 표 안에서 명령 사용 가능
+    \item \verb/\NewTableCommand/ 안에는 텍스트 입력 불가
+    \item \verb/expand/ 옵션으로 타협
+  \end{itemize}
+
+  참고: \manual{3.2.3 Expand Macros First, 3.6 New Table Commands}
+
+  \begin{center}
+    \begin{tblr}{%
+        hlines, vlines,
+        cell{1}{2-4} = {bg=gray9},
+    }
+      1 & Beta & Gamma & Delta    \\
+      2 & Beta & Gamma & Delta    \\
+      3 & \SC Beta & \SC Gamma & Delta    \\
+    \end{tblr}
+  \end{center}
+
+  \framebreak
+  \begin{lstlisting}
+% \NewTableCommand\SC{\SetCell{bg=red8}} in the preamble
+  \begin{tblr}{%
+      hlines, vlines,
+      cell{1}{2-4} = {bg=gray9},
+  }
+    1 & Beta & Gamma & Delta    \\
+    2 & Beta & Gamma & Delta    \\
+    3 & \SC Beta & \SC Gamma & Delta    \\
+  \end{tblr}
+  \end{lstlisting}
+\end{frame}
+
+\begin{frame}[c,fragile,allowframebreaks]
+  \frametitle{표 환경}
+  % https://tex.stackexchange.com/a/634511/97583
+  \begin{itemize}
+    \item \verb/\NewTblrEnviron/를 사용하여 새로운 표 환경 정의 가능
+    \item 내부 설정 (inner specifications)
+    \item 외부 설정 (outer specifications)
+  \end{itemize}
+
+  참고: \manual{3.1 Inner Specifications, 3.2 Outer Specifications, 3.4 New Tabularray Environments, 3.5 New General Environments}
+
+  \begin{center}
+    \begin{tblr}{%
+        hlines, vlines,
+        cell{1}{2-4} = {bg=gray9},
+    }
+      1 & Beta & Gamma & Delta    \\
+      2 & Beta & Gamma & Delta    \\
+      3 & \SC Beta & \SC Gamma & Delta    \\
+    \end{tblr}
+  \end{center}
+
+  \framebreak
+  \begin{lstlisting}
+% \NewTableCommand\SC{\SetCell{bg=red8}} in the preamble
+  \begin{tblr}{%
+      hlines, vlines,
+      cell{1}{2-4} = {bg=gray9},
+  }
+    1 & Beta & Gamma & Delta    \\
+    2 & Beta & Gamma & Delta    \\
+    3 & \SC Beta & \SC Gamma & Delta    \\
+  \end{tblr}
+  \end{lstlisting}
+\end{frame}
+
+\begin{frame}[c,fragile,allowframebreaks]
+  \frametitle{siunitx}
+
+  참고: \manual{???}
+
+  \begin{center}
+    \tiny
+    \begin{tblr}{S[table-format=4.2]S[table-format=3.3]S[table-format=3.3]S[table-format=3.3]}
+      \toprule
+      {{{$V_s$ [mV]}}} & {{{$V_R$ [mV]}}} & {{{$V_D$ [mV]}}} & {{{$I_D$ [µA]}}} \\
+      \midrule
+      100.47    & 0.035      & 100.002    & 0.035\\
+      199.67    & 0.144      & 199.46     & 0.145\\
+      296.41     & 0.974      & 295.17     & 0.983\\
+      400.26     & 7.470      & 392.57     & 7.539\\
+      500.13     & 36.904     & 463.48     & 37.247\\
+      602.24     & 94.535     & 507.65     & 95.413\\
+      703.92     & 168.73     & 535.10     & 170.30\\
+      801.07     & 248.07     & 552.89     & 250.37\\
+      899.73     & 332.25     & 567.62     & 335.34\\
+      1008.14    & 428.76     & 579.35     & 432.74\\
+      1104.33    & 514.13     & 589.49     & 518.90\\
+      1200.23    & 602.45     & 597.38     & 608.04\\
+      \bottomrule
+    \end{tblr}
+  \end{center}
+
+  \framebreak
+  \begin{lstlisting}
+% \UseTblrLibrary{booktabs}
+% \UseTblrLibrary{siunitx} in the preamble
+\begin{tblr}{S[table-format=4.2]S[table-format=3.3]S[table-format=3.3]S[table-format=3.3]}
+  \toprule
+  {{{$V_s$ [mV]}}} & {{{$V_R$ [mV]}}} & {{{$V_D$ [mV]}}} & {{{$I_D$ [µA]}}} \\
+  \midrule
+  100.47    & 0.035      & 100.002    & 0.035\\
+  199.67    & 0.144      & 199.46     & 0.145\\
+  296.41     & 0.974      & 295.17     & 0.983\\
+  400.26     & 7.470      & 392.57     & 7.539\\
+  500.13     & 36.904     & 463.48     & 37.247\\
+  602.24     & 94.535     & 507.65     & 95.413\\
+  703.92     & 168.73     & 535.10     & 170.30\\
+  801.07     & 248.07     & 552.89     & 250.37\\
+  899.73     & 332.25     & 567.62     & 335.34\\
+  1008.14    & 428.76     & 579.35     & 432.74\\
+  1104.33    & 514.13     & 589.49     & 518.90\\
+  1200.23    & 602.45     & 597.38     & 608.04\\
+  \bottomrule
+\end{tblr}
+  \end{lstlisting}
+\end{frame}
+
+
+% leftskip rightskip
+% https://tex.stackexchange.com/questions/639150/tabularray-padding-per-cell/639181#639181
+
+% @{}
+% https://tex.stackexchange.com/a/638809/97583
+
+\end{document}
