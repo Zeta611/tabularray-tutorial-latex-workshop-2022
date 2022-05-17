@@ -71,10 +71,10 @@
 \begin{document}
 \maketitle
 
-% \begin{frame}[t]
-%   \frametitle{목차}
-%   \tableofcontents
-% \end{frame}
+\begin{frame}[t]
+  \frametitle{목차}
+  \tableofcontents
+\end{frame}
 
 % https://tex.stackexchange.com/search?page=2&tab=Relevance&q=user%3a106776%20%5btabularray%5d
 
@@ -90,7 +90,15 @@
 
 \begin{frame}[c]
   \frametitle{표를 그리자}
-  \begin{tblr}{cc}
+  \centering
+  \begin{itemize}
+    \item 가로선 및 세로선
+    \item 색칠하기
+    \item 정렬하기
+    \item \ldots
+  \end{itemize}
+
+  \begin{tblr}{c|c}
     \toprule
     입력 & 출력 \\
     \midrule
@@ -101,20 +109,109 @@
   \end{tblr}
 \end{frame}
 
-\section{기본}
-\begin{frame}[c,fragile,allowframebreaks]
-  \frametitle{열 타입}
-  % https://tex.stackexchange.com/a/608978/97583
-  \texttt{colspec}
+\begin{frame}[c,fragile]
+  \frametitle{간단한 표}
+  \begin{columns}
+    \begin{column}{0.5\textwidth}
+      \begin{center}
+        \begin{tblr}{|l|l|}
+          \hline
+          a & b \\
+          \hline
+          c & d \\
+          \hline
+        \end{tblr}
+      \end{center}
+    \end{column}
 
-  참고: \manual{???}
+    \begin{column}{0.5\textwidth}
+      \begin{lstlisting}
+\begin{tblr}{|l|l|}
+  \hline
+  a & b \\
+  \hline
+  c & d \\
+  \hline
+\end{tblr}
+      \end{lstlisting}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+
+\section{기본}
+\begin{frame}[c,fragile]
+  \frametitle{열 정렬}
+  \begin{columns}
+    \begin{column}{0.35\textwidth}
+      \begin{center}
+        \begin{tblr}{|r|cl}
+          \hline
+          abc & {A\\B\\C} & C \\
+          \hline
+          $\alpha$ & 3.14 & \texttt{text} \\
+          \hline
+        \end{tblr}
+      \end{center}
+    \end{column}
+
+    \begin{column}{0.65\textwidth}
+      \begin{lstlisting}
+\begin{tblr}{|r|cl}
+  \hline
+  abc & {A\\B\\C} & C \\
+  \hline
+  $\alpha$ & 3.14 & \texttt{text} \\
+  \hline
+\end{tblr}
+      \end{lstlisting}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}[c,fragile]
+  \frametitle{New Interface}
+  \begin{columns}
+    \begin{column}{0.35\textwidth}
+      \begin{center}
+        \begin{tblr}{
+          hlines,
+          vline{1,2} = {solid},
+          colspec = {rcl},
+        }
+          abc & {A\\B\\C} & C \\
+          $\alpha$ & 3.14 & \texttt{text} \\
+        \end{tblr}
+      \end{center}
+    \end{column}
+
+    \begin{column}{0.65\textwidth}
+      \begin{lstlisting}
+\begin{tblr}{
+  hlines,
+  vline{1,2} = {solid},
+  colspec = {rcl},
+}
+  abc & {A\\B\\C} & C \\
+  $\alpha$ & 3.14 & \texttt{text} \\
+\end{tblr}
+      \end{lstlisting}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}[c,fragile]
+  \frametitle{열 타입}
+  % 참고: \manual{???}
+
+  정렬, 너비, 비율, 수식(!)까지
 
   \begin{columns}
     \begin{column}{0.5\textwidth}
       \begin{center}
-        \begin{tblr}{%
+        \begin{tblr}{
           vlines, hlines,
-          colspec = {Q[$]l},
+          colspec = {Q[$]Q[l,4em]},
         }
         a_i &   b   \\
             & text  \\
@@ -125,13 +222,13 @@
 
     \begin{column}{0.5\textwidth}
       \begin{lstlisting}
-\begin{tblr}{%
+\begin{tblr}{
   vlines, hlines,
-  colspec = {Q[$]l},
+  colspec = {Q[$]Q[l,4em]},
 }
-  a_i &   b   \\
+a_i &   b   \\
     & text  \\
-  x_i & text  \\
+x_i & text  \\
 \end{tblr}
       \end{lstlisting}
     \end{column}
@@ -139,21 +236,27 @@
 \end{frame}
 
 \begin{frame}[c,fragile,allowframebreaks]
-  \frametitle{칸 정렬}
+  \frametitle{행 정렬}
   % https://tex.stackexchange.com/a/597283/97583
-  \verb/tbhf/
-  h: text in the head of the cell
+  \begin{description}
+    \item[h] text in the head of the cell
+    \item[m] text in the middle
+    \item[f] text in the foot of the cell
+    \item[b] bottom line in the middle
+    \item[t] top line in the middle
+  \end{description}
 
-  f: foot of the cell
+  \begin{verbatim}
+\begin{tblr}{
+  Q[h,4em]Q[t,4em]Q[m,4em]Q[b,4em]Q[f,4em]
+}
+\begin{tblr}{h{4em}t{4em}m{4em}b{4em}f{4em}}
+  \end{verbatim}
 
-  b: bottom line in the middle
-
-  t: top line in the middle
-
-  참고: \manual{???}
-
+  % 참고: \manual{???}
+  \framebreak
   \begin{center}
-    \begin{tblr}[t]{hlines, colspec={c}, baseline=T}
+    \begin{tblr}{Q[h,4em]Q[t,4em]Q[m,4em]Q[b,4em]Q[f,4em]}
       \hline
       {row\\head} & {top\\line} & {middle} & {line\\bottom} & {row\\foot} \\
       \hline
@@ -164,7 +267,8 @@
 
   \framebreak
   \begin{lstlisting}
-\begin{tblr}[t]{hlines, colspec={c}, baseline=T}
+% \begin{tblr}{Q[h,4em]Q[t,4em]Q[m,4em]Q[b,4em]Q[f,4em]}
+\begin{tblr}{h{4em}t{4em}m{4em}b{4em}f{4em}}
   \hline
   {row\\head} & {top\\line} & {middle} & {line\\bottom} & {row\\foot} \\
   \hline
@@ -174,12 +278,130 @@
   \end{lstlisting}
 \end{frame}
 
+\begin{frame}[c,fragile]
+  \frametitle{행 타입}
+  % 참고: \manual{???}
+
+  \verb/\hline/까지 한 번에
+
+  \begin{columns}
+    \begin{column}{0.35\textwidth}
+      \begin{center}
+        \begin{tblr}{
+          colspec = {Q[$]Q[l,4em]},
+          rowspec = {|[2pt]Q[m]|[dotted]Q[b]|[dashed]Q[t]|},
+        }
+          a_i &   b   \\
+              & text  \\
+          x_i & text  \\
+        \end{tblr}
+      \end{center}
+    \end{column}
+
+    \begin{column}{0.65\textwidth}
+      \begin{lstlisting}
+\begin{tblr}{
+  colspec = {Q[$]Q[l,4em]},
+  rowspec = {|[2pt]Q[m]|[dotted]Q[b]|[dashed]Q[t]|},
+}
+  a_i &   b   \\
+      & text  \\
+  x_i & text  \\
+\end{tblr}
+      \end{lstlisting}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}[c,fragile]
+  \frametitle{\texttt{verbatim}}
+  \begin{columns}
+    \begin{column}{0.5\textwidth}
+      \begin{center}
+        \begin{tblr}{verb}
+          \verb/hello/ & \verb/world/ \\
+          \verb/foo/ & \verb/bar/ \\
+        \end{tblr}
+      \end{center}
+    \end{column}
+
+    \begin{column}{0.5\textwidth}
+      \begin{lstlisting}
+\begin{tblr}{verb}
+  \verb/hello/ & \verb/world/ \\
+  \verb/foo/ & \verb/bar/ \\
+\end{tblr}
+      \end{lstlisting}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\section{심화}
+\begin{frame}[c,fragile,allowframebreaks]
+  \frametitle{열 너비 비율과 행 병합}
+  \begin{itemize}
+    \item \verb/X/ type column
+    \item \verb/width=\linewidth/이 기본값
+  \end{itemize}
+
+  % 참고: \manual{???}
+
+  \begin{center}
+    \tiny
+    \begin{tblr}{colspec={X[4,c]X[5,l]X[3,l]},rulesep=.8pt}
+      \hline[1pt]
+      Category & Operation & Description \\
+      \hline
+      \hline
+      \SetCell[r=2]{m} {Arithmetic\\Operations} & Addition & $C \asgn A + B$ \\
+                                  & Subtraction & $C \asgn A - B$ \\
+      \hline
+      \SetCell[r=6]{m} {Bitwise\\Boolean\\Operations} & NAND & $C \asgn \neg(A \mathbin{\&} B)$ \\
+                                  & NOR & $C \asgn \neg(A \mathbin{|} B)$ \\
+                                  & XNOR & $C \asgn A \mathbin{\equiv} B$ \\
+                                  & AND & $C \asgn A \mathbin{\&} B$ \\
+                                  & OR & $C \asgn A \mathbin{|} B$ \\
+                                  & XOR & $C \asgn A \oplus B$ \\
+      \hline
+      \SetCell[r=4]{m} {Shifting\\Operations} & Logical Right Shift & $C \asgn A \gg 1$ \\
+                                & Arithmetic Right Shift & $C \asgn A \ggg 1$ \\
+                                & Logical Left Shift & $C \asgn A \ll 1$ \\
+                                & Arithmetic Left Shift & $C \asgn A \lll 1$ \\
+      \hline[1pt]
+    \end{tblr}
+  \end{center}
+
+  \begin{lstlisting}
+\begin{tblr}{colspec={X[4,c]X[5,l]X[3,l]},rulesep=.8pt}
+  \hline[1pt]
+  Category & Operation & Description \\
+  \hline
+  \hline
+  \SetCell[r=2]{m} {Arithmetic\\Operations} & Addition & $C \asgn A + B$ \\
+                              & Subtraction & $C \asgn A - B$ \\
+  \hline
+  \SetCell[r=6]{m} {Bitwise\\Boolean\\Operations} & NAND & $C \asgn \neg(A \mathbin{\&} B)$ \\
+                              & NOR & $C \asgn \neg(A \mathbin{|} B)$ \\
+                              & XNOR & $C \asgn A \mathbin{\equiv} B$ \\
+                              & AND & $C \asgn A \mathbin{\&} B$ \\
+                              & OR & $C \asgn A \mathbin{|} B$ \\
+                              & XOR & $C \asgn A \oplus B$ \\
+  \hline
+  \SetCell[r=4]{m} {Shifting\\Operations} & Logical Right Shift & $C \asgn A \gg 1$ \\
+                            & Arithmetic Right Shift & $C \asgn A \ggg 1$ \\
+                            & Logical Left Shift & $C \asgn A \ll 1$ \\
+                            & Arithmetic Left Shift & $C \asgn A \lll 1$ \\
+  \hline[1pt]
+\end{tblr}
+  \end{lstlisting}
+\end{frame}
+
 \begin{frame}[c,fragile,allowframebreaks]
   \frametitle{문장과 정렬}
   % https://tex.stackexchange.com/a/608979/97583
   \verb/baseline/
 
-  참고: \manual{???}
+  % 참고: \manual{???}
 
   \begin{center}
     Lorem ipsum
@@ -205,64 +427,46 @@ adipiscing \\ elit. \\
   \end{lstlisting}
 \end{frame}
 
-\begin{frame}[c,fragile,allowframebreaks]
-  \frametitle{열 너비 비율}
-  참고: \manual{???}
 
-  \begin{center}
-    \tiny
-    \begin{tblr}{colspec={X[4,c]X[5,l]X[3,l,f]},rulesep=.8pt}
-      \hline[1pt]
-      Category & Operation & Description \\
-      \hline
-      \hline
-      \SetCell[r=2]{m} {Arithmetic\\Operations} & Addition & $C \asgn A + B$ \\
-                                  & Subtraction & $C \asgn A - B$ \\
-      \hline
-      \SetCell[r=6]{m} {Bitwise\\Boolean\\Operations} & NAND & $C \asgn \neg(A \mathbin{\&} B)$ \\
-                                  & NOR & $C \asgn \neg(A \mathbin{|} B)$ \\
-                                  & XNOR & $C \asgn A \mathbin{\equiv} B$ \\
-                                  & AND & $C \asgn A \mathbin{\&} B$ \\
-                                  & OR & $C \asgn A \mathbin{|} B$ \\
-                                  & XOR & $C \asgn A \oplus B$ \\
-      \hline
-      \SetCell[r=4]{m} {Shifting\\Operations} & Logical Right Shift & $C \asgn A \gg 1$ \\
-                                & Arithmetic Right Shift & $C \asgn A \ggg 1$ \\
-                                & Logical Left Shift & $C \asgn A \ll 1$ \\
-                                & Arithmetic Left Shift & $C \asgn A \lll 1$ \\
-      \hline[1pt]
-    \end{tblr}
-  \end{center}
+\begin{frame}[c,fragile]
+  \frametitle{구분선 서식}
+  \texttt{vline}, \texttt{hline}, \texttt{vlines} \& \texttt{hlines}
 
-  \begin{lstlisting}
-\begin{tblr}{colspec={X[4,c]X[5,l]X[3,l,f]},rulesep=.8pt}
-  \hline[1pt]
-  Category & Operation & Description \\
-  \hline
-  \hline
-  \SetCell[r=2]{m} {Arithmetic\\Operations} & Addition & $C \asgn A + B$ \\
-                              & Subtraction & $C \asgn A - B$ \\
-  \hline
-  \SetCell[r=6]{m} {Bitwise\\Boolean\\Operations} & NAND & $C \asgn \neg(A \mathbin{\&} B)$ \\
-                              & NOR & $C \asgn \neg(A \mathbin{|} B)$ \\
-                              & XNOR & $C \asgn A \mathbin{\equiv} B$ \\
-                              & AND & $C \asgn A \mathbin{\&} B$ \\
-                              & OR & $C \asgn A \mathbin{|} B$ \\
-                              & XOR & $C \asgn A \oplus B$ \\
-  \hline
-  \SetCell[r=4]{m} {Shifting\\Operations} & Logical Right Shift & $C \asgn A \gg 1$ \\
-                            & Arithmetic Right Shift & $C \asgn A \ggg 1$ \\
-                            & Logical Left Shift & $C \asgn A \ll 1$ \\
-                            & Arithmetic Left Shift & $C \asgn A \lll 1$ \\
-  \hline[1pt]
+  % 참고: \manual{2.2 Hlines and Vlines}
+  \begin{columns}
+    \begin{column}{0.5\textwidth}
+      \begin{center}
+        \begin{tblr}{%
+          hlines = {1}{-}{solid},
+          vline{1,Z} = {1pt},
+          vline{X} = {dashed},
+        }
+          A & B & C & D & E \\
+          a & b & c & d & e \\
+          0 & 1 & 2 & 3 & 4 \\
+        \end{tblr}
+      \end{center}
+    \end{column}
+
+    \begin{column}{0.5\textwidth}
+      \begin{lstlisting}
+\begin{tblr}{%
+  hlines = {1}{-}{solid},
+  vline{1,Z} = {1pt},
+  vline{X} = {dashed},
+}
+  A & B & C & D & E \\
+  a & b & c & d & e \\
+  0 & 1 & 2 & 3 & 4 \\
 \end{tblr}
-  \end{lstlisting}
+      \end{lstlisting}
+    \end{column}
+  \end{columns}
 \end{frame}
 
-\section{심화}
 \begin{frame}[c,fragile,allowframebreaks]
-  \frametitle{특별한 구분자}
-  \texttt{vline} \& \texttt{hline}
+  \frametitle{특별한 구분선}
+  % \texttt{vline} \& \texttt{hline}
 
   참고: \manual{2.2 Hlines and Vlines}
 
@@ -315,23 +519,23 @@ adipiscing \\ elit. \\
         hlines, vlines,
         cell{1}{2-4} = {bg=gray9},
     }
-      1 & Beta & Gamma & Delta    \\
-      2 & Beta & Gamma & Delta    \\
-      3 & \SC Beta & \SC Gamma & Delta    \\
+      \SC 1 & Beta & Gamma & Delta    \\
+      2 & Beta & Gamma & \SC Delta    \\
+      3 & Beta & \SC Gamma & Delta    \\
     \end{tblr}
   \end{center}
 
   \framebreak
   \begin{lstlisting}
 % \NewTableCommand\SC{\SetCell{bg=red8}} in the preamble
-  \begin{tblr}{%
-      hlines, vlines,
-      cell{1}{2-4} = {bg=gray9},
-  }
-    1 & Beta & Gamma & Delta    \\
-    2 & Beta & Gamma & Delta    \\
-    3 & \SC Beta & \SC Gamma & Delta    \\
-  \end{tblr}
+\begin{tblr}{%
+    hlines, vlines,
+    cell{1}{2-4} = {bg=gray9},
+}
+  \SC 1 & Beta & Gamma & Delta    \\
+  2 & Beta & Gamma & \SC Delta    \\
+  3 & Beta & \SC Gamma & Delta    \\
+\end{tblr}
   \end{lstlisting}
 \end{frame}
 
@@ -347,34 +551,33 @@ adipiscing \\ elit. \\
   참고: \manual{3.1 Inner Specifications, 3.2 Outer Specifications, 3.4 New Tabularray Environments, 3.5 New General Environments}
 
   \begin{center}
-    \begin{tblr}{%
-        hlines, vlines,
-        cell{1}{2-4} = {bg=gray9},
-    }
-      1 & Beta & Gamma & Delta    \\
-      2 & Beta & Gamma & Delta    \\
-      3 & \SC Beta & \SC Gamma & Delta    \\
-    \end{tblr}
+    \NewTblrEnviron{mytblr}
+    \SetTblrInner[mytblr]{hlines,vlines}
+    \SetTblrOuter[mytblr]{baseline=B}
+      Text \begin{mytblr}{cccc}
+      Alpha   & Beta  & Gamma  & Delta \\
+      Epsilon & Zeta  & Eta    & Theta \\
+      Iota    & Kappa & Lambda & Mu    \\
+     \end{mytblr} Text
   \end{center}
 
   \framebreak
   \begin{lstlisting}
-% \NewTableCommand\SC{\SetCell{bg=red8}} in the preamble
-  \begin{tblr}{%
-      hlines, vlines,
-      cell{1}{2-4} = {bg=gray9},
-  }
-    1 & Beta & Gamma & Delta    \\
-    2 & Beta & Gamma & Delta    \\
-    3 & \SC Beta & \SC Gamma & Delta    \\
-  \end{tblr}
+\NewTblrEnviron{mytblr}
+\SetTblrInner[mytblr]{hlines,vlines}
+\SetTblrOuter[mytblr]{baseline=B}
+  Text \begin{mytblr}{cccc}
+  Alpha   & Beta  & Gamma  & Delta \\
+  Epsilon & Zeta  & Eta    & Theta \\
+  Iota    & Kappa & Lambda & Mu    \\
+ \end{mytblr} Text
   \end{lstlisting}
 \end{frame}
 
 \begin{frame}[c,fragile,allowframebreaks]
-  \frametitle{siunitx}
+  \frametitle{siunitx + booktabs}
 
-  참고: \manual{???}
+  % 참고: \manual{???}
 
   \begin{center}
     \tiny
@@ -421,6 +624,14 @@ adipiscing \\ elit. \\
   \bottomrule
 \end{tblr}
   \end{lstlisting}
+\end{frame}
+
+\begin{frame}[c]
+  \begin{center}
+    이외에도 다양하게 표를 꾸밀 수 있으니 매뉴얼을 참고해주세요.
+
+    감사합니다.
+  \end{center}
 \end{frame}
 
 
